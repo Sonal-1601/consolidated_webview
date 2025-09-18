@@ -1,4 +1,4 @@
-# consolidated_app
+# consolidated_pos
 
 A new Flutter project.
 
