@@ -82,30 +82,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
     }
   }
 
-  Future<void> _refreshPage() async {
-    // Check network connectivity before refreshing
-    final hasInternet = await NetworkService.hasInternetConnection();
-    if (!hasInternet) {
-      NetworkService.showNetworkErrorDialog(context);
-      return;
-    }
-    
-    if (_currentUrl != null) {
-      await _controller.reload();
-    }
-  }
-
-  Future<void> _goBack() async {
-    if (await _controller.canGoBack()) {
-      await _controller.goBack();
-    }
-  }
-
-  Future<void> _goForward() async {
-    if (await _controller.canGoForward()) {
-      await _controller.goForward();
-    }
-  }
 
   Future<void> _changeUrl() async {
     // Clear the stored URL so user can enter a new one

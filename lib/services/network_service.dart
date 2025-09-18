@@ -8,10 +8,10 @@ class NetworkService {
   // Check if device has internet connectivity
   static Future<bool> hasInternetConnection() async {
     try {
-      final connectivityResult = await _connectivity.checkConnectivity();
+      final connectivityResults = await _connectivity.checkConnectivity();
       
       // If no connectivity at all, return false
-      if (connectivityResult == ConnectivityResult.none) {
+      if (connectivityResults.contains(ConnectivityResult.none)) {
         return false;
       }
       
@@ -24,12 +24,12 @@ class NetworkService {
   }
   
   // Listen to connectivity changes
-  static Stream<ConnectivityResult> get connectivityStream {
+  static Stream<List<ConnectivityResult>> get connectivityStream {
     return _connectivity.onConnectivityChanged;
   }
   
   // Check current connectivity status
-  static Future<ConnectivityResult> getCurrentConnectivity() async {
+  static Future<List<ConnectivityResult>> getCurrentConnectivity() async {
     return await _connectivity.checkConnectivity();
   }
   
