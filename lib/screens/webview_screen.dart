@@ -124,66 +124,68 @@ class _WebViewScreenState extends State<WebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Web View Screen'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _refreshPage,
-            tooltip: 'Refresh',
-          ),
-          // IconButton(
-          //   icon: const Icon(Icons.edit),
-          //   onPressed: _changeUrl,
-          //   tooltip: 'Change URL',
-          // ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Navigation buttons
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: Border(
-                bottom: BorderSide(
-                  color: Theme.of(context).dividerColor,
-                  width: 1,
-                ),
-              ),
+      // appBar: AppBar(
+      //   title: const Text('Web View Screen'),
+      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.refresh),
+      //       onPressed: _refreshPage,
+      //       tooltip: 'Refresh',
+      //     ),
+      //     // IconButton(
+      //     //   icon: const Icon(Icons.edit),
+      //     //   onPressed: _changeUrl,
+      //     //   tooltip: 'Change URL',
+      //     // ),
+      //   ],
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Navigation buttons
+            // Container(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   decoration: BoxDecoration(
+            //     color: Theme.of(context).colorScheme.surface,
+            //     border: Border(
+            //       bottom: BorderSide(
+            //         color: Theme.of(context).dividerColor,
+            //         width: 1,
+            //       ),
+            //     ),
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       IconButton(
+            //         icon: const Icon(Icons.arrow_back),
+            //         onPressed: _goBack,
+            //         tooltip: 'Go Back',
+            //       ),
+            //       IconButton(
+            //         icon: const Icon(Icons.arrow_forward),
+            //         onPressed: _goForward,
+            //         tooltip: 'Go Forward',
+            //       ),
+            //       Expanded(
+            //         child: Padding(
+            //           padding: const EdgeInsets.symmetric(horizontal: 8),
+            //           child: Text(
+            //             _currentUrl ?? 'Loading...',
+            //             style: const TextStyle(fontSize: 12),
+            //             overflow: TextOverflow.ellipsis,
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Web view content
+            Expanded(
+              child: _buildWebViewContent(),
             ),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: _goBack,
-                  tooltip: 'Go Back',
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward),
-                  onPressed: _goForward,
-                  tooltip: 'Go Forward',
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      _currentUrl ?? 'Loading...',
-                      style: const TextStyle(fontSize: 12),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Web view content
-          Expanded(
-            child: _buildWebViewContent(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
