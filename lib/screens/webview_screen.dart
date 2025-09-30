@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import '../services/preferences_service.dart';
 import '../services/network_service.dart';
-import 'url_input_screen.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({super.key});
@@ -12,6 +10,9 @@ class WebViewScreen extends StatefulWidget {
 }
 
 class _WebViewScreenState extends State<WebViewScreen> {
+  // Hardcoded URL
+  static const String kWebUrl = 'https://platinum.arzen.io/web-interface/';
+  
   late final WebViewController _controller;
   bool _isLoading = true;
   String? _currentUrl;
@@ -34,19 +35,11 @@ class _WebViewScreenState extends State<WebViewScreen> {
         NetworkService.showNetworkErrorDialog(context);
         return;
       }
-      
-      final storedUrl = await PreferencesService.getUrl();
-      
-      if (storedUrl == null) {
-        setState(() {
-          _errorMessage = 'No URL stored. Please enter a URL first.';
-          _isLoading = false;
-        });
-        return;
-      }
 
       _controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(const Color(0x00000000))
+        ..enableZoom(false)
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
@@ -64,15 +57,21 @@ class _WebViewScreenState extends State<WebViewScreen> {
             onWebResourceError: (WebResourceError error) {
               setState(() {
                 _isLoading = false;
-                _errorMessage = 'Failed to load page: ${error.description}';
+                _errorMessage = 'Failed to load page: ${error.description}\nError code: ${error.errorCode}\nError type: ${error.errorType}';
+              });
+            },
+            onHttpError: (HttpResponseError error) {
+              setState(() {
+                _isLoading = false;
+                _errorMessage = 'HTTP Error: ${error.response?.statusCode}';
               });
             },
           ),
         )
-        ..loadRequest(Uri.parse(storedUrl));
+        ..loadRequest(Uri.parse(kWebUrl));
 
       setState(() {
-        _currentUrl = storedUrl;
+        _currentUrl = kWebUrl;
       });
     } catch (e) {
       setState(() {
@@ -92,32 +91,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
     
     if (_currentUrl != null) {
       await _controller.reload();
-    }
-  }
-
-  Future<void> _goBack() async {
-    if (await _controller.canGoBack()) {
-      await _controller.goBack();
-    }
-  }
-
-  Future<void> _goForward() async {
-    if (await _controller.canGoForward()) {
-      await _controller.goForward();
-    }
-  }
-
-  Future<void> _changeUrl() async {
-    // Clear the stored URL so user can enter a new one
-    await PreferencesService.clearUrl();
-    
-    if (mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const UrlInputScreen(),
-        ),
-      );
     }
   }
 
@@ -209,8 +182,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _changeUrl,
-              child: const Text('Enter New URL'),
+              onPressed: _refreshPage,
+              child: const Text('Retry'),
             ),
           ],
         ),

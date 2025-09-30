@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Base configuration for all connections -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Trust pre-installed system CAs -->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Debug overrides (remove for production) -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user-added CAs in debug builds -->
+            <certificates src="user" />
+            <certificates src="system" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>
